@@ -13,8 +13,14 @@
 		</java>
 	</target>
 	
-	<target name="red-gray" depends="build">
-		<java classname="ReduceGrayTrame" fork="yes">
+	<target name="red-gray-irr-disp" depends="build">
+		<java classname="ReduceGrayTrameIrrDisp" fork="yes">
+			<classpath path=".out/" />
+		</java>
+	</target>
+
+	<target name="red-gray-reg-cent" depends="build">
+		<java classname="ReduceGrayTrameRegularCentered" fork="yes">
 			<classpath path=".out/" />
 		</java>
 	</target>

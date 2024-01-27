@@ -3,12 +3,12 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
 
-public class ReduceGrayTrame {
+public class ReduceGrayTrameRegularCentered {
 
 	public static void main (String[] args) {
 			
 BufferedImage image;
-		String path = "image.png";
+		String path = "images/image.png";
 		File input_file = new File(path);
 		try {
 			image = ImageIO.read(input_file);
@@ -175,7 +175,7 @@ BufferedImage image;
 						image.setRGB(4 * i, 4 * j, 4, 4, chosen, 0, 4);
 				}
 
-			File reduced = new File("reduced-image.png");
+			File reduced = new File("output/reduced-image-reg-centered.png");
 			ImageIO.write(image, "png", reduced);
 
 		} catch (Exception e) {
