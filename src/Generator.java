@@ -22,9 +22,9 @@ public class Generator {
 			image.setRGB(i, j, rgb);
 		}
 
-		File outputfile = new File("image.jpg");
+		File outputfile = new File("image.png");
 		try {
-			ImageIO.write(image, "jpg", outputfile);
+			ImageIO.write(image, "png", outputfile);
 		} catch (Exception e) {
 			 e.printStackTrace();
 		}

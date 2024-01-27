@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project default="build">
-	<target name="run" depends="build">
+	<target name="gen" depends="build">
 		<java classname="Generator" fork="yes">
+			<classpath path=".out/" />
+		</java>
+	</target>
+	
+	<target name="red-gray-naif" depends="build">
+		<java classname="ReduceGrayNaif" fork="yes">
+			<classpath path=".out/" />
+		</java>
+	</target>
+	
+	<target name="red-gray" depends="build">
+		<java classname="ReduceGrayTrame" fork="yes">
 			<classpath path=".out/" />
 		</java>
 	</target>
