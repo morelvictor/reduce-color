@@ -150,7 +150,6 @@ BufferedImage image;
 					for(int y = 0; y < 4; y++) {
 						tot += image.getRGB(4 * i + x, 4 * j + y) & 0xFF;
 					}
-					System.out.println(tot / 16 / 16);
 					int chosen[];
 						switch (tot / 16 / 16) {
 							case 0: chosen = z; break;

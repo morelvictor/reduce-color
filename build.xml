@@ -18,6 +18,13 @@
 			<classpath path=".out/" />
 		</java>
 	</target>
+	
+	<target name="trame" depends="build">
+		<java classname="Trame" fork="yes">
+			<classpath path=".out/" />
+		</java>
+	</target>
+
 
 	<target name="red-gray-reg-cent" depends="build">
 		<java classname="ReduceGrayTrameRegularCentered" fork="yes">
