@@ -96,7 +96,27 @@ public class Trame {
 		}
 	}
 
-	public static int[][] gen_centered_matrix(int size, int center_x, int center_y) {
+	public static int size2(int[][] t) {
+		int res = 0;
+		for (int i = 0; i < t.length; i++) {
+			res += t[i].length;
+		}
+		return res;
+	}
+
+	public static int[] flatten(int[][] m) {
+		int res[] = new int[size2(m)];
+
+		for (int i = 0; i < m.length; i++) {
+			for (int j = 0; j < m[i].length; j++) {
+				res[i + j] = m[i][j];
+			}
+		}
+
+		return res;
+	}
+
+	public static int[] gen_centered_matrix(int size, int center_x, int center_y) {
 		assert size > 0;
 		assert center_x >= 0;
 		assert center_x < size;
@@ -161,31 +181,24 @@ public class Trame {
 				}
 			}
 		}
-		return result;
+		return flatten(result);
 	}
 
 	public static void main(String[] args) {
-		/*
-		 * int m[] = gen_matrix(0);
-		 * Trame t = new Trame(4, 4, m);
-		 * for (int i = 1; i < 6; i++) {
-		 * String path = "images/image" + i + ".png";
-		 * File input_file = new File(path);
-		 * try {
-		 * BufferedImage image = ImageIO.read(input_file);
-		 * BufferedImage n = t.traming(image);
-		 * 
-		 * File reduced = new File("output/trame/gen-trame" + i + ".png");
-		 * ImageIO.write(n, "png", reduced);
-		 * } catch (Exception e) {
-		 * e.printStackTrace();
-		 * }
-		 * }
-		 */
+		int m[] = gen_matrix(0);
+		Trame t = new Trame(4, 4, m);
+		for (int i = 1; i < 6; i++) {
+			String path = "images/image" + i + ".png";
+			File input_file = new File(path);
+			try {
+				BufferedImage image = ImageIO.read(input_file);
+				BufferedImage n = t.traming(image);
 
-		int[][] m = gen_centered_matrix(15, 3, 4);
-
-		p_arr2(m);
-
+				File reduced = new File("output/trame/gen-trame" + i + ".png");
+				ImageIO.write(n, "png", reduced);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
