@@ -31,12 +31,25 @@ public class Trame {
 
 		int w = 0xFFFFFF;
 		int b = 0;
-		for (int i = 0; i < width * height; i++)
+		for (int i = 0; i < width * height; i++) {
 			for (int j = 0; j < width * height; j++) {
-				ret[i][j] = matrix[j] <= i ? w : b;
+				ret[i][j] = matrix[j] > i ? b : w;
 			}
+		}
 
 		return ret;
+	}
+
+	void printPattern() {
+		for(int i = 0; i < patterns.length; ++i) {
+			for(int j = 0; j < width * height; ++j) {
+				System.out.print(patterns[i][j] == 0 ? "b " : "w ");
+				if((j + 1) % width == 0) {
+					System.out.print("\n");
+				}
+			}
+			System.out.println("---------------------------------------------------\n");
+		}
 	}
 
 	BufferedImage traming(BufferedImage src) {
@@ -48,6 +61,8 @@ public class Trame {
 		int t_x = image.getWidth() / width;
 		int t_y = image.getHeight() / height;
 
+		//printPattern();
+
 		for (int i = 0; i < t_x; i++)
 			for (int j = 0; j < t_y; j++) {
 				int tot = 0;
@@ -55,8 +70,7 @@ public class Trame {
 					for (int y = 0; y < height; y++) {
 						tot += image.getRGB(width * i + x, height * j + y) & 0xFF;
 					}
-				image.setRGB(width * i, height * j, width, height, patterns[tot / (height * width * width * height)], 0,
-						width);
+				image.setRGB(width * i, height * j, width, height, patterns[tot / (height * width * width * height)], 0, width);
 			}
 
 		return image;
@@ -65,10 +79,10 @@ public class Trame {
 	public static int[] gen_matrix(int centre) {
 		// centre correspond à l'indice du centre
 		int m[] = {
-				15, 4, 8, 12,
-				11, 0, 1, 5,
-				7, 2, 3, 9,
-				14, 10, 6, 13
+			15, 4, 8, 12,
+			11, 0, 1, 5,
+			7, 2, 3, 9,
+			14, 10, 6, 13
 		};
 		int res[] = new int[16];
 		int decalage = (centre - 5 + 16) % 16;
@@ -96,31 +110,26 @@ public class Trame {
 		}
 	}
 
-	public static int size2(int[][] t) {
-		int res = 0;
-		for (int i = 0; i < t.length; i++) {
-			res += t[i].length;
-		}
-		return res;
-	}
+	public static int[] flatten(int[][] array2D) {
+        int totalLength = 0;
+        for (int[] row : array2D) {
+            totalLength += row.length;
+        }
 
-	public static int[] flatten(int[][] m) {
-		int res[] = new int[size2(m)];
+        int[] flattenedArray = new int[totalLength];
+        int index = 0;
+        for (int[] row : array2D) {
+            for (int num : row) {
+                flattenedArray[index++] = num;
+            }
+        }
 
-		for (int i = 0; i < m.length; i++) {
-			for (int j = 0; j < m[i].length; j++) {
-				res[i + j] = m[i][j];
-				//System.out.print(m[i][j] + "	");
-			}
-			//System.out.println("");
-		}
-		
-
-		return res;
-	}
+        return flattenedArray;
+    }
 
 	public static int[] gen_centered_matrix(int size, int center_x, int center_y, boolean black) {
-		// black c'est true si on centre noir et blanc sinon
+		// true si centré blanc 
+		// false si centré noir
 		assert size > 0;
 		assert center_x >= 0;
 		assert center_x < size;
@@ -190,9 +199,9 @@ public class Trame {
 	}
 
 	public static void main(String[] args) {
-		int m[] = gen_centered_matrix(5, 3, 2, false);
+		int m[] = gen_centered_matrix(4, 1, 1, true);
 
-		Trame t = new Trame(5, 5, m);
+		Trame t = new Trame(4, 4, m);
 		for (int i = 1; i < 7; i++) {
 			String path = "images/image" + i + ".png";
 			File input_file = new File(path);
