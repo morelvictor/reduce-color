@@ -110,13 +110,17 @@ public class Trame {
 		for (int i = 0; i < m.length; i++) {
 			for (int j = 0; j < m[i].length; j++) {
 				res[i + j] = m[i][j];
+				//System.out.print(m[i][j] + "	");
 			}
+			//System.out.println("");
 		}
+		
 
 		return res;
 	}
 
-	public static int[] gen_centered_matrix(int size, int center_x, int center_y) {
+	public static int[] gen_centered_matrix(int size, int center_x, int center_y, boolean black) {
+		// black c'est true si on centre noir et blanc sinon
 		assert size > 0;
 		assert center_x >= 0;
 		assert center_x < size;
@@ -134,37 +138,37 @@ public class Trame {
 		int u = center_y;
 		int d = center_y;
 
-		Phase p = Phase.LEFT;
+		Phase p = Phase.DOWN;
 
 		int x = center_x;
 		int y = center_y;
 
 		int count = 1;
-		result[y][x] = 0;
+		result[y][x] = black ? 0 : size * size - 1;
 		while (l >= 0 || r <= size - 1 || u >= 0 || d <= size - 1) {
 			switch (p) {
-				case Phase.LEFT:
+				case LEFT:
 					x--;
 					if (x == l - 1) {
 						p = Phase.DOWN;
 						l--;
 					}
 					break;
-				case Phase.RIGHT:
+				case RIGHT:
 					x++;
 					if (x == r + 1) {
 						p = Phase.UP;
 						r++;
 					}
 					break;
-				case Phase.UP:
+				case UP:
 					y--;
 					if (y == u - 1) {
 						p = Phase.LEFT;
 						u--;
 					}
 					break;
-				case Phase.DOWN:
+				case DOWN:
 					y++;
 					if (y == d + 1) {
 						p = Phase.RIGHT;
@@ -176,18 +180,20 @@ public class Trame {
 			}
 			if (x >= 0 && x < size && y >= 0 && y < size) {
 				if (result[y][x] == -1) {
-					result[y][x] = count;
+					result[y][x] = black ? count : size * size - 1 - count;
 					count++;
 				}
 			}
 		}
+		//p_arr2(result);
 		return flatten(result);
 	}
 
 	public static void main(String[] args) {
-		int m[] = gen_matrix(0);
-		Trame t = new Trame(4, 4, m);
-		for (int i = 1; i < 6; i++) {
+		int m[] = gen_centered_matrix(5, 3, 2, false);
+
+		Trame t = new Trame(5, 5, m);
+		for (int i = 1; i < 7; i++) {
 			String path = "images/image" + i + ".png";
 			File input_file = new File(path);
 			try {

@@ -134,7 +134,7 @@ public class ReduceGrayTrameRegularCentered {
 		};
 
 		int chosen[];
-		switch (tot / 16 / 16) {
+		switch (nWhite / 16 / 16) {
 			case 0: chosen = z; break;
 			case 1: chosen = u; break;
 			case 2: chosen = d; break;
