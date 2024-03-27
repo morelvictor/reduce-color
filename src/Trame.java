@@ -202,7 +202,7 @@ public class Trame {
 		int m[] = gen_centered_matrix(4, 1, 1, true);
 
 		Trame t = new Trame(4, 4, m);
-		for (int i = 1; i < 7; i++) {
+		for (int i = 1; i < 8; i++) {
 			String path = "images/image" + i + ".png";
 			File input_file = new File(path);
 			try {
