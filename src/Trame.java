@@ -26,6 +26,21 @@ public class Trame {
 
 	}
 
+	int[][] genRandomPatterns() {
+		Random r = new Random();
+		int ret[][] = new int[width * height][width * height];
+		matrix = gen_centered_matrix(width, r.nextInt(width), r.nextInt(width), r.nextBoolean());
+		int w = 0xFFFFFF;
+		int b = 0;
+		for (int i = 0; i < width * height; i++) {
+			for (int j = 0; j < width * height; j++) {
+				ret[i][j] = matrix[j] > i ? b : w;
+			}
+		}
+
+		return ret;
+	}
+
 	int[][] genPatterns() {
 		int ret[][] = new int[width * height][width * height];
 
@@ -51,6 +66,32 @@ public class Trame {
 			System.out.println("---------------------------------------------------\n");
 		}
 	}
+
+	BufferedImage randomTraming(BufferedImage src) {
+		ColorModel cm = src.getColorModel();
+		boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+		WritableRaster raster = src.copyData(null);
+		BufferedImage image = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+
+		int t_x = image.getWidth() / width;
+		int t_y = image.getHeight() / height;
+
+		//printPattern();
+
+		for (int i = 0; i < t_x; i++)
+			for (int j = 0; j < t_y; j++) {
+				int tot = 0;
+				patterns = genRandomPatterns();
+				for (int x = 0; x < width; x++)
+					for (int y = 0; y < height; y++) {
+						tot += image.getRGB(width * i + x, height * j + y) & 0xFF;
+					}
+				image.setRGB(width * i, height * j, width, height, patterns[tot / (height * width * width * height)], 0, width);
+			}
+
+		return image;
+	}
+
 
 	BufferedImage traming(BufferedImage src) {
 		ColorModel cm = src.getColorModel();
@@ -199,7 +240,7 @@ public class Trame {
 	}
 
 	public static void main(String[] args) {
-		int m[] = gen_centered_matrix(4, 1, 1, true);
+		int m[] = gen_centered_matrix(4, 2, 2, true);
 
 		Trame t = new Trame(4, 4, m);
 		for (int i = 1; i < 8; i++) {
@@ -207,7 +248,7 @@ public class Trame {
 			File input_file = new File(path);
 			try {
 				BufferedImage image = ImageIO.read(input_file);
-				BufferedImage n = t.traming(image);
+				BufferedImage n = t.randomTraming(image);
 
 				File reduced = new File("output/trame/gen-trame" + i + ".png");
 				ImageIO.write(n, "png", reduced);
