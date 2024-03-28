@@ -25,6 +25,11 @@
 		</java>
 	</target>
 
+	<target name="floyd" depends="build">
+		<java classname="FloydSteinberg" fork="yes">
+			<classpath path=".out/" />
+		</java>
+	</target>
 
 	<target name="red-gray-reg-cent" depends="build">
 		<java classname="ReduceGrayTrameRegularCentered" fork="yes">
