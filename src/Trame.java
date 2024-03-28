@@ -93,7 +93,7 @@ public class Trame {
 	}
 
 
-	BufferedImage traming(BufferedImage src) {
+	BufferedImage traming(BufferedImage src, boolean floydSteinberg) {
 		ColorModel cm = src.getColorModel();
 		boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
 		WritableRaster raster = src.copyData(null);
@@ -107,14 +107,53 @@ public class Trame {
 		for (int i = 0; i < t_x; i++)
 			for (int j = 0; j < t_y; j++) {
 				int tot = 0;
-				for (int x = 0; x < width; x++)
+				for (int x = 0; x < width; x++) {
 					for (int y = 0; y < height; y++) {
 						tot += image.getRGB(width * i + x, height * j + y) & 0xFF;
 					}
+				}
 				image.setRGB(width * i, height * j, width, height, patterns[tot / (height * width * width * height)], 0, width);
+				if(floydSteinberg) {
+					for (int x = 0; x < width; x++) {
+						for (int y = 0; y < height; y++) {
+							int srcPix = src.getRGB(width * i + x, height * j + y);
+							int tramedPix = image.getRGB(width * i + x, height * j + y);
+							int erreur = srcPix - tramedPix;
+							if(width * (i + 1) + x < src.getWidth() && width * (i - 1) + x > 0 && height * (j + 1) + y < src.getHeight() && height * j + y > 0) {
+								image.setRGB(width * (i + 1) + x, height * j + y, image.getRGB( width * (i + 1) + x, height * j + y) + 7/16 * erreur);
+								image.setRGB(width * (i - 1) + x, height * (j + 1) + y, image.getRGB( width * (i - 1) + x, height * (j + 1) + y) + 3/16 * erreur);
+								image.setRGB(width * i + x, height * (j + 1) + y, image.getRGB( width * i + x, height * (j + 1) + y) + 5/16 * erreur);
+								image.setRGB(width * (i + 1) + x, height * (j + 1) + y, image.getRGB( width * (i + 1) + x, height * (j + 1) + y) + 1/16 * erreur);
+							}
+
+						}
+					}
+
+				}
 			}
 
 		return image;
+	}
+
+	BufferedImage floydSteinberg(BufferedImage src, BufferedImage tramed) {
+
+		int t_x = tramed.getWidth() - tramed.getWidth() % width;
+		int t_y = tramed.getHeight() - tramed.getHeight() % height;
+
+		for (int i = 1; i < t_x - 1; i++)
+			for (int j = 1; j < t_y - 1; j++) {
+				int srcPix = src.getRGB(i, j);
+				int tramedPix = tramed.getRGB(i, j);
+				int erreur = srcPix - tramedPix;
+				System.out.println("erreur : " + erreur);
+				tramed.setRGB(i + 1, j, tramed.getRGB(i + 1, j) + 7/16 * erreur);
+				tramed.setRGB(i - 1, j + 1, tramed.getRGB(i - 1, j + 1) + 3/16 * erreur);
+				tramed.setRGB(i, j + 1, tramed.getRGB(i, j + 1) + 5/16 * erreur);
+				tramed.setRGB(i + 1, j + 1, tramed.getRGB(i + 1, j + 1) + 1/16 * erreur);
+			}
+
+		return tramed;
+
 	}
 
 	public static int[] gen_matrix(int centre) {
@@ -152,21 +191,21 @@ public class Trame {
 	}
 
 	public static int[] flatten(int[][] array2D) {
-        int totalLength = 0;
-        for (int[] row : array2D) {
-            totalLength += row.length;
-        }
+		int totalLength = 0;
+		for (int[] row : array2D) {
+			totalLength += row.length;
+		}
 
-        int[] flattenedArray = new int[totalLength];
-        int index = 0;
-        for (int[] row : array2D) {
-            for (int num : row) {
-                flattenedArray[index++] = num;
-            }
-        }
+		int[] flattenedArray = new int[totalLength];
+		int index = 0;
+		for (int[] row : array2D) {
+			for (int num : row) {
+				flattenedArray[index++] = num;
+			}
+		}
 
-        return flattenedArray;
-    }
+		return flattenedArray;
+	}
 
 	public static int[] gen_centered_matrix(int size, int center_x, int center_y, boolean black) {
 		// true si centré blanc 
@@ -243,18 +282,21 @@ public class Trame {
 		int m[] = gen_centered_matrix(4, 2, 2, true);
 
 		Trame t = new Trame(4, 4, m);
-		for (int i = 1; i < 8; i++) {
-			String path = "images/image" + i + ".png";
-			File input_file = new File(path);
-			try {
-				BufferedImage image = ImageIO.read(input_file);
-				BufferedImage n = t.randomTraming(image);
+		//for (int i = 1; i < 8; i++) {
+		int i = 5;
+		String path = "images/image" + i + ".png";
+		File input_file = new File(path);
+		try {
+			BufferedImage image = ImageIO.read(input_file);
+			//BufferedImage n = t.randomTraming(image);
+			BufferedImage n = t.traming(image, false);
+			n = t.floydSteinberg(image, n); 
 
-				File reduced = new File("output/trame/gen-trame" + i + ".png");
-				ImageIO.write(n, "png", reduced);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			File reduced = new File("output/trame/gen-trame" + i + ".png");
+			ImageIO.write(n, "png", reduced);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		//}
 	}
 }
