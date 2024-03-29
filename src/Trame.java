@@ -252,7 +252,7 @@ public class Trame {
 			BufferedImage image = ImageIO.read(input_file);
 			//BufferedImage n = t.randomTraming(image);
 			BufferedImage n = t.traming(image);
-
+			//File reduced = new File("output/trame_alea/gen-trame" + i + ".png");
 			File reduced = new File("output/trame/gen-trame" + i + ".png");
 			ImageIO.write(n, "png", reduced);
 		} catch (Exception e) {
