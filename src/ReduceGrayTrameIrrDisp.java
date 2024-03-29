@@ -36,7 +36,7 @@ public class ReduceGrayTrameIrrDisp {
 	public static void main (String[] args) {
 
 		BufferedImage image;
-		String path = "images/farwest.png";
+		String path = "images/image9.png";
 		File input_file = new File(path);
 		try {
 			image = ImageIO.read(input_file);

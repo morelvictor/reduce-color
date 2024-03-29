@@ -245,15 +245,15 @@ public class Trame {
 		int m[] = gen_centered_matrix(4, 2, 2, true);
 
 		Trame t = new Trame(4, 4, m);
-		for (int i = 1; i < 8; i++) {
+		for (int i = 1; i < 10; i++) {
 		String path = "images/image" + i + ".png";
 		File input_file = new File(path);
 		try {
 			BufferedImage image = ImageIO.read(input_file);
-			//BufferedImage n = t.randomTraming(image);
-			BufferedImage n = t.traming(image);
-			//File reduced = new File("output/trame_alea/gen-trame" + i + ".png");
-			File reduced = new File("output/trame/gen-trame" + i + ".png");
+			BufferedImage n = t.randomTraming(image);
+			//BufferedImage n = t.traming(image);
+			File reduced = new File("output/trame_alea/gen-trame" + i + ".png");
+			//File reduced = new File("output/trame/gen-trame" + i + ".png");
 			ImageIO.write(n, "png", reduced);
 		} catch (Exception e) {
 			e.printStackTrace();

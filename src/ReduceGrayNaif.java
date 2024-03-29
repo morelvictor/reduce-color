@@ -8,7 +8,7 @@ public class ReduceGrayNaif {
 
 	public static void main (String[] args) {
 		BufferedImage image;
-		String path = "image.png";
+		String path = "images/image9.png";
 		File input_file = new File(path);
 		try {
 			image = ImageIO.read(input_file);
@@ -25,7 +25,7 @@ public class ReduceGrayNaif {
 					image.setRGB(i, j, color);
 				}
 
-			File reduced = new File("reduced-image.png");
+			File reduced = new File("output/reduced-image.png");
 			ImageIO.write(image, "png", reduced);
 
 		} catch (Exception e) {
