@@ -69,7 +69,7 @@ public class FloydSteinberg {
 				BufferedImage image = ImageIO.read(input_file);
 
 				BufferedImage ditheredImage = dither(image);
-				File reduced = new File("output/floyd/gen-trame" + i + ".png");
+				File reduced = new File("output/" + i + "-floyd-gris.png");
 				ImageIO.write(ditheredImage, "png", reduced);
 			} catch (Exception e) {
 				e.printStackTrace();

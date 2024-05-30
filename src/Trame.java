@@ -330,22 +330,31 @@ public class Trame {
 	}
 
 	public static void main(String[] args) {
-		int m[] = gen_disp_matrix(4);
+		Trame ord_disp = new Trame(4, 4, gen_disp_matrix(4));
+		Trame ord_centered = new Trame(4, 4, gen_centered_matrix(4, 2, 2, true));
+		Trame random = new Trame(4, 4);
 
-		Trame t = new Trame(4, 4, m);
 		for (int i = 1; i < 10; i++) {
-		String path = "images/image" + i + ".png";
-		File input_file = new File(path);
-		try {
-			BufferedImage image = ImageIO.read(input_file);
-			BufferedImage n = t.traming(image);
-			//BufferedImage n = t.traming(image);
-			File reduced = new File("output/trame/gen-trame" + i + ".png");
-			//File reduced = new File("output/trame/gen-trame" + i + ".png");
-			ImageIO.write(n, "png", reduced);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			String path = "images/image" + i + ".png";
+			File input_file = new File(path);
+			try {
+				BufferedImage image = ImageIO.read(input_file);
+
+				BufferedImage ord_disp_reduce = ord_disp.traming(image);
+				BufferedImage ord_centered_reduce = ord_centered.traming(image);
+				BufferedImage random_reduce = random.randomTraming(image);
+
+				File reduced = new File("output/" + i + "-trame-ord-disp.png");
+				File reduced2 = new File("output/" + i + "-trame-ord-centered.png");
+				File reduced3 = new File("output/" + i + "-trame-random.png");
+
+				ImageIO.write(ord_disp_reduce, "png", reduced);
+				ImageIO.write(ord_centered_reduce, "png", reduced2);
+				ImageIO.write(random_reduce, "png", reduced3);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

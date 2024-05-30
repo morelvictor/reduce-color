@@ -4,7 +4,7 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 
-public class ImageColorReduction {
+public class FloydSteinbergColor {
     // Définir les couleurs prédéfinies
     private static final Color[] predefinedColors = {
         new Color(255, 255, 0),   // Jaune
@@ -15,7 +15,7 @@ public class ImageColorReduction {
 
     public static void main(String[] args) {
         if (args.length != 2) {
-            System.out.println("Usage: java ImageColorReduction <input_image> <output_image>");
+            System.out.println("Usage: java FloydSteinbergColor <input_image> <output_image>");
             return;
         }
 
