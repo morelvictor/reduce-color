@@ -14,17 +14,22 @@ public class FloydSteinbergColor {
     };
 
     public static void main(String[] args) {
-        if (args.length != 2) {
-            System.out.println("Usage: java FloydSteinbergColor <input_image> <output_image>");
-            return;
+        for(int i = 1; i < 10; i++) {
+            String path = "images/image" + i + ".png";
+            try {
+                BufferedImage originalImage = ImageIO.read(new File(path));
+                BufferedImage newImage = floyd(originalImage);
+
+                File reduced = new File("output/" + i + "-floyd-color.png");
+                ImageIO.write(newImage, "png", reduced);
+            } catch (IOException e) {
+                System.out.println("Error reading or writing image file: " + e.getMessage());
+            }
         }
+    }
 
-        String inputImagePath = args[0];
-        String outputImagePath = args[1];
-
-        try {
-            BufferedImage originalImage = ImageIO.read(new File(inputImagePath));
-            BufferedImage newImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+    public static BufferedImage floyd(BufferedImage originalImage) {
+        BufferedImage newImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_RGB);
 
             for (int y = 0; y < originalImage.getHeight(); y++) {
                 for (int x = 0; x < originalImage.getWidth(); x++) {
@@ -41,12 +46,7 @@ public class FloydSteinbergColor {
                     diffuseError(originalImage, x, y, error);
                 }
             }
-
-            ImageIO.write(newImage, "png", new File(outputImagePath));
-            System.out.println("Image processed and saved to " + outputImagePath);
-        } catch (IOException e) {
-            System.out.println("Error reading or writing image file: " + e.getMessage());
-        }
+        return newImage;
     }
 
     private static Color findClosestPredefinedColor(Color color) {
@@ -73,10 +73,10 @@ public class FloydSteinbergColor {
 
     private static void diffuseError(BufferedImage image, int x, int y, int[] error) {
         int[][] directions = {
-            {1, 0, 7},
-            {-1, 1, 3},
-            {0, 1, 5},
-            {1, 1, 1}
+            {1, 0, 7},  // droite
+            {-1, 1, 3}, // bas gauche
+            {0, 1, 5},  // bas
+            {1, 1, 1}   // bas droite
         };
 
         for (int[] direction : directions) {

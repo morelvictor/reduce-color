@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project default="build">
+	<target name="main" depends="build">
+		<java classname="Main" fork="yes">
+			<classpath path=".out/" />
+		</java>
+	</target>
+
 	<target name="gen" depends="build">
 		<java classname="Generator" fork="yes">
 			<classpath path=".out/" />

@@ -60,7 +60,6 @@ public class FloydSteinberg {
 
 	// Exemple d'utilisation
 	public static void main(String[] args) {
-		
 		for(int i = 1; i < 10; i++) {
 			String path = "images/image" + i + ".png";
 			File input_file = new File(path);
