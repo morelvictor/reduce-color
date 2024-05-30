@@ -2,9 +2,11 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
+import java.lang.reflect.Array;
 
 import javax.imageio.ImageIO;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Trame {
@@ -241,8 +243,94 @@ public class Trame {
 		return flatten(result);
 	}
 
+	public static int[][] matrix_product(int[][] m1, int[][] m2) {
+		int res[][] = new int[m1.length][m2[0].length];
+		for (int i = 0; i < m1.length; i++) {
+			for (int j = 0; j < m2[0].length; j++) {
+				for (int k = 0; k < m1[0].length; k++) {
+					res[i][j] += m1[i][k] * m2[k][j];
+				}
+			}
+		}
+		return res;
+	}
+
+	public static int[][] matrix_real_product(int[][] m, int scalar) {
+		int res[][] = new int[m.length][m[0].length];
+		for (int i = 0; i < m.length; i++) {
+			for (int j = 0; j < m[0].length; j++) {
+				res[i][j] = m[i][j] * scalar;
+			}
+		}
+		return res;
+	}
+
+	public static int[][] matrix_sum(int[][] m1, int[][] m2) {
+		int res[][] = new int[m1.length][m1[0].length];
+		for (int i = 0; i < m1.length; i++) {
+			for (int j = 0; j < m1[0].length; j++) {
+				res[i][j] = m1[i][j] + m2[i][j];
+			}
+		}
+		return res;
+	}
+
+	public static int[][] only_one(int size) {
+		int res[][] = new int[size][size];
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				res[i][j] = 1;
+			}
+		}
+		return res;
+	}
+
+	public static void set_block(int[][]origin, int[][]block, int x, int y) {
+		for (int i = 0; i < block.length; i++) {
+			for (int j = 0; j < block[0].length; j++) {
+				origin[y + i][x + j] = block[i][j];
+			}
+		}
+	}
+
+	static int d_2[][] = {
+		{0, 2},
+		{3, 1}
+	};
+
+	public static int[][] gen_disp_matrix2(int size) {
+		int res[][] = new int[size][size];
+		if(size == 2) {
+			return d_2;
+		} else {
+			int k = (int) Math.sqrt(size);
+			assert k * k == size;
+			int n = size / 2;
+
+			int one_n[][] = only_one(n);
+			int d_n[][] = gen_disp_matrix2(n);
+
+			int b1[][] = matrix_sum(matrix_real_product(d_n, 4), matrix_real_product(one_n, d_2[0][0]));
+			int b2[][] = matrix_sum(matrix_real_product(d_n, 4), matrix_real_product(one_n, d_2[0][1]));
+			int b3[][] = matrix_sum(matrix_real_product(d_n, 4), matrix_real_product(one_n, d_2[1][0]));
+			int b4[][] = matrix_sum(matrix_real_product(d_n, 4), matrix_real_product(one_n, d_2[1][1]));
+
+			set_block(res, b1, 0, 0);
+			set_block(res, b2, n, 0);
+			set_block(res, b3, 0, n);
+			set_block(res, b4, n, n);
+
+			return res;
+		}
+	}
+
+	public static int[] gen_disp_matrix(int size) {
+		int res[][] = gen_disp_matrix2(size);
+		return flatten(res);
+	}
+
 	public static void main(String[] args) {
-		int m[] = gen_centered_matrix(4, 2, 2, true);
+		int m[] = gen_disp_matrix(4);
 
 		Trame t = new Trame(4, 4, m);
 		for (int i = 1; i < 10; i++) {
@@ -250,9 +338,9 @@ public class Trame {
 		File input_file = new File(path);
 		try {
 			BufferedImage image = ImageIO.read(input_file);
-			BufferedImage n = t.randomTraming(image);
+			BufferedImage n = t.traming(image);
 			//BufferedImage n = t.traming(image);
-			File reduced = new File("output/trame_alea/gen-trame" + i + ".png");
+			File reduced = new File("output/trame/gen-trame" + i + ".png");
 			//File reduced = new File("output/trame/gen-trame" + i + ".png");
 			ImageIO.write(n, "png", reduced);
 		} catch (Exception e) {
