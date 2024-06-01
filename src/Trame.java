@@ -334,8 +334,8 @@ public class Trame {
 		Trame ord_centered = new Trame(4, 4, gen_centered_matrix(4, 2, 2, true));
 		Trame random = new Trame(4, 4);
 
-		for (int i = 1; i < 10; i++) {
-			String path = "images/image" + i + ".png";
+		if(args.length > 0) {
+			String path = args[0];
 			File input_file = new File(path);
 			try {
 				BufferedImage image = ImageIO.read(input_file);
@@ -344,9 +344,9 @@ public class Trame {
 				BufferedImage ord_centered_reduce = ord_centered.traming(image);
 				BufferedImage random_reduce = random.randomTraming(image);
 
-				File reduced = new File("output/" + i + "-trame-ord-disp.png");
-				File reduced2 = new File("output/" + i + "-trame-ord-centered.png");
-				File reduced3 = new File("output/" + i + "-trame-random.png");
+				File reduced = new File("soutenance/output/trame-ord-disp.png");
+				File reduced2 = new File("soutenance/output/trame-ord-centered.png");
+				File reduced3 = new File("soutenance/output/trame-random.png");
 
 				ImageIO.write(ord_disp_reduce, "png", reduced);
 				ImageIO.write(ord_centered_reduce, "png", reduced2);

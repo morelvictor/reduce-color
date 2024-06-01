@@ -14,13 +14,13 @@ public class FloydSteinbergColor {
     };
 
     public static void main(String[] args) {
-        for(int i = 1; i < 10; i++) {
-            String path = "images/image" + i + ".png";
+        if(args.length > 0) {
+            String path = args[0];
             try {
                 BufferedImage originalImage = ImageIO.read(new File(path));
                 BufferedImage newImage = floyd(originalImage);
 
-                File reduced = new File("output/" + i + "-floyd-color.png");
+                File reduced = new File("soutenance/output/floyd-color.png");
                 ImageIO.write(newImage, "png", reduced);
             } catch (IOException e) {
                 System.out.println("Error reading or writing image file: " + e.getMessage());

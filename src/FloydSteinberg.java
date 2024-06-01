@@ -60,21 +60,20 @@ public class FloydSteinberg {
 
 	// Exemple d'utilisation
 	public static void main(String[] args) {
-		for(int i = 1; i < 10; i++) {
-			String path = "images/image" + i + ".png";
+		if(args.length == 1) {
+			String path = args[0];
 			File input_file = new File(path);
 			try {
 
 				BufferedImage image = ImageIO.read(input_file);
 
 				BufferedImage ditheredImage = dither(image);
-				File reduced = new File("output/" + i + "-floyd-gris.png");
+				File reduced = new File("soutenance/output/floyd-gris.png");
 				ImageIO.write(ditheredImage, "png", reduced);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-
 	}
 }
 
